@@ -4,6 +4,7 @@ import axios from "axios";
 
 export const defaultState = {
     tasks: [],
+    selectedTask: {},
     search: "",
 }
 
@@ -40,6 +41,11 @@ export const TaskReducer = (state, action) => {
                 ...state,
                 search: action.payload.search,
             }
+        case Action.Update:
+            return {
+                ...state,
+                selectedTask: action.payload.selectedTask,
+            }
         default:
             return state;
             break;
@@ -62,6 +68,16 @@ const fetchTasks = (dispatch) => {
     }
 }
 
+const selectTask = (dispatch) => {
+    return (task) => {
+        dispatch({
+            type: Action.Update,
+            payload: {
+                selectedTask: task,
+            }
+        });
+    }
+}
 const search = (dispatch) => {
     return (search) => {
         dispatch({
@@ -126,6 +142,7 @@ export const TaskProvider = ({ children, initialState, reducer }) => {
         addTask: addTask(dispatch),
         deleteTask: deleteTask(dispatch),
         search: search(dispatch),
+        selectTask: selectTask(dispatch),
     }
 
     return <store.Provider value={value}>{children}</store.Provider>;

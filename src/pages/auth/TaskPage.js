@@ -21,6 +21,9 @@ const TaskPage = () => {
         addTask(title, description, deadline)
             .then((resp) => {
                 setAddMode(false);
+                setTitle("");
+                setDescription("");
+                setDeadline(moment().format("YYYY-MM-DD"));
             });
     }
 
@@ -33,13 +36,13 @@ const TaskPage = () => {
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
-
+    console.log(state.selectedTask)
     return (
         <>
             {/* Modal */}
             <Loader visible={isLoading}/>
-            <div className={addMode ? "absolute bg-black bg-opacity-50 opacity-80 inset-0 z-0 h-full" : "hidden"} onClick={() => setAddMode(false)}></div>
-            <div className={addMode ? "w-full max-w-lg p-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto my-auto rounded-xl shadow-lg bg-white z-10" : "hidden"}>
+                <div className={addMode ? "absolute bg-black bg-opacity-50 opacity-80 inset-0 z-0 h-full" : "hidden"} onClick={() => setAddMode(false)}></div>
+                <div className={addMode ? "w-full max-w-lg p-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto my-auto rounded-xl shadow-lg bg-white z-10" : "hidden"}>
                 <form onSubmit={onSubmit}>
                 <div className="pb-2 border-b-2 border-black my-2">
                     <input type="text" placeholder="Title..." value={title} className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" onChange={(e) => setTitle(e.target.value)} required/>
@@ -63,7 +66,6 @@ const TaskPage = () => {
                 </div>
                 </form>
             </div>
-
             <div className="flex flex-1">
                 <Sidebar/>
                 <div className="flex-1">
