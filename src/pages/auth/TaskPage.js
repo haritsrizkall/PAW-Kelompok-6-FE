@@ -1,69 +1,46 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import Sidebar from "../../components/navbar/Sidebar";
-import search from "./../../assets/images/search.png"
-import profile from "./../../assets/images/profile.png"
 import Topbar from "../../components/topbar/Topbar";
 import TaskCard from "../../components/TaskCard";
 import moment from "moment";
-import { getUserActivities } from "../../database/functions";
+import Loader from "../../components/Loader";
+import { useTask } from "../../context/TaskContext";
 
 const TaskPage = () => {
-
-    const [task, setTask] = useState([]);
+    const {state, fetchTask, addTask} = useTask();
     const [addMode, setAddMode] = useState(false);
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState(1)
     const [deadline, setDeadline] = useState(moment().format("YYYY-MM-DD"))
-    const id = localStorage.getItem("id");
+    const [isLoading, setIsLoading] = useState(true)
 
-    const addTask = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${process.env.REACT_APP_APIURL}/activities`, {
-            title,
-            description,
-            deadline
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        }).then((resp) => {
-            setAddMode(false);
-        }).catch((err) => {
-            console.log(err.response.data);
-        });
-
-        getUserActivities(id, localStorage.getItem("token"))
-            .then((res) => {
-                console.log(res.data.data);
-                setTask(res.data.data);
-            })
-            .catch((err) => {
-                console.log(err.response.data);
-            })
+        addTask(title, description, deadline)
+            .then((resp) => {
+                setAddMode(false);
+            });
     }
 
     useEffect(() => {
-        getUserActivities(id, localStorage.getItem("token"))
-            .then((res) => {
-                setTask(res.data.data);
-            })
-            .catch((err) => {
-                console.log(err.response.data);
-            })
-    }, [])
+        fetchTask().then(() => {
+            setIsLoading(false);
+        });
+    }, []);
 
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
+
     return (
         <>
             {/* Modal */}
+            <Loader visible={isLoading}/>
             <div className={addMode ? "absolute bg-black bg-opacity-50 opacity-80 inset-0 z-0 h-full" : "hidden"} onClick={() => setAddMode(false)}></div>
             <div className={addMode ? "w-full max-w-lg p-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto my-auto rounded-xl shadow-lg bg-white z-10" : "hidden"}>
-                <form onSubmit={addTask}>
+                <form onSubmit={onSubmit}>
                 <div className="pb-2 border-b-2 border-black my-2">
                     <input type="text" placeholder="Title..." value={title} className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" onChange={(e) => setTitle(e.target.value)} required/>
                 </div>
@@ -81,7 +58,9 @@ const TaskPage = () => {
                         <option value={3}>Done</option>
                     </select>
                 </div>
-                    <button type="submit">Add Task</button>
+                <div className="flex justify-end">
+                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white" type="submit">Add Task</button>
+                </div>
                 </form>
             </div>
 
@@ -97,7 +76,7 @@ const TaskPage = () => {
                         }}>New Task</button>
                     </div>
                     <div className="grid grid-cols-3 mt-5">
-                       {task.map((val) => (
+                       {state.tasks.filter(task => task.title.toLowerCase().includes(state.search.toLowerCase())).map((val) => (
                            <TaskCard data={val}/>
                        ))}
                     </div>

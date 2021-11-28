@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { defaultState, TaskProvider, TaskReducer } from './context/TaskContext';
+import { UserProvider, defaultState as defaultStateUser, UserReducer } from './context/UserContext';
+
 require('dotenv').config()
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UserProvider initialState={defaultStateUser} reducer={UserReducer}>
+      <TaskProvider initialState={defaultState} reducer={TaskReducer}>
+        <App />
+      </TaskProvider>
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -5,28 +5,33 @@ import Sidebar from "./../components/navbar/Sidebar";
 import search from "./../assets/images/search.png"
 import profpic from "./../assets/images/profile.png"
 import Topbar from "../components/topbar/Topbar";
+import Loader from "../components/Loader";
+import { useUser } from "../context/UserContext";
 
 const AccountPage = () => {
     const [profile, setProfile] = useState({})
     const [editMode, setEditMode] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const {state: userState, fetchUser} = useUser();
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_APIURL}/users/${localStorage.getItem("id")}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        }).then((res) => {
-            setProfile(res.data.data);
+        fetchUser()
+        .then(() => {
+            setIsLoading(false)
         }).catch((err) => {
-            console.log(err.response.data.data);
+            console.log(err);
         })
+
     }, [])
 
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
+
+    console.log(userState.user)
     return (
         <>
+            <Loader visible={isLoading}/>
             <div className="flex flex-1">
                 <Sidebar/>
                 <div className="flex-1">
@@ -43,19 +48,18 @@ const AccountPage = () => {
                                 <div className="flex items-center mb-5">
                                     <label className="inline-block w-44 mr-6 text-left 
                                      font-bold text-l">Name</label>
-                                    <input  type="text" id="name" name="name" placeholder="Name" value={profile.name}
-                                    class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode}/>
+                                    <input  type="text" id="name" name="name" placeholder="Name" value={userState.user.name} class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode}/>
                                 </div>
                                 <div className="flex items-center mb-5">
                                     <label className="iinline-block w-44 mr-6 text-left 
                                      font-bold text-l">Email</label>
-                                    <input  type="text" id="email" name="email" placeholder="Email" value={profile.email}
+                                    <input  type="text" id="email" name="email" placeholder="Email" value={userState.user.email}
                                     class="flex-1 shadow-md py-3 px-2 bg-gray-100 rounded focus:outline-none" disabled={!editMode}/>
                                 </div>
                                 <div className="flex items-center mb-5">
                                     <label className="inline-block w-44 mr-6 text-left 
                                      font-bold text-l">Password</label>
-                                    <input  type="password" id="password" name="password" placeholder="Password" value={"rahasia"}
+                                    <input  type="password" id="password" name="password" placeholder="Password" value={"rahasia"} 
                                     class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode}/>
                                 </div>
                                 <div className="flex mt-7 justify-end">

@@ -8,8 +8,11 @@ import {
 import AuthPage from './pages/auth/AuthPage';
 import TaskPage from './pages/auth/TaskPage';
 import AccountPage from './pages/AccountPage';
+import { useEffect } from 'react';
+import { fetchTask } from './context/TaskContext';
 
 function App() {
+  
   return (
     <BrowserRouter>
       <Routes>
