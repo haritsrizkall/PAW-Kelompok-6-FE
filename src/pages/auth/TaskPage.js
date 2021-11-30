@@ -62,7 +62,7 @@ const TaskPage = () => {
                     </select>
                 </div>
                 <div className="flex justify-end">
-                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white" type="submit">Add Task</button>
+                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white font-semibold" type="submit">Add Task</button>
                 </div>
                 </form>
             </div>
@@ -70,12 +70,12 @@ const TaskPage = () => {
                 <Sidebar/>
                 <div className="flex-1">
                     <Topbar/>
-                    <div className="mx-5 mt-5 flex justify-between items-center">
-                        <h1 className="text-3xl font-semibold">My Tasks</h1>
-                        <button className="bg-blue-500 px-8 py-3 rounded-md text-white"  onClick={(e) => {
+                    <div className="mx-10 mt-2 flex justify-between items-center">
+                        <h1 className="text-3xl font-bold">My Tasks</h1>
+                        <button className="cursor-pointer hover:border-blue-500 hover:bg-white hover:text-blue-500 border bg-blue-500 px-8 py-3 rounded-md text-white font-semibold"  onClick={(e) => {
                             e.preventDefault()
                             setAddMode(true);
-                        }}>New Task</button>
+                        }}>+ New Task</button>
                     </div>
                     <div className="grid grid-cols-3 mt-5">
                        {state.tasks.filter(task => task.title.toLowerCase().includes(state.search.toLowerCase())).map((val) => (
