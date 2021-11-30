@@ -7,6 +7,7 @@ export const defaultState = {
         name: "Jabari",
         email: "",
         password: "",
+        avatar: "",
     }
 }
 

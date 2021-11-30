@@ -27,8 +27,6 @@ const AccountPage = () => {
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
-
-    console.log(userState.user)
     return (
         <>
             <Loader visible={isLoading}/>
@@ -41,7 +39,7 @@ const AccountPage = () => {
                     </div>
                     <div className="flex mx-10 mt-10">
                         <div className="mr-12">
-                            <img src={profpic} width={250} className="rounded-sm"/>
+                            <img src={userState.user.avatar ? userState.user.avatar : profpic} width={250} className="rounded-sm"/>
                         </div>
                         <div className="flex-1 ml-12">
                             <form>

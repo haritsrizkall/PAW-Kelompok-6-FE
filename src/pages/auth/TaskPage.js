@@ -6,27 +6,30 @@ import TaskCard from "../../components/TaskCard";
 import moment from "moment";
 import Loader from "../../components/Loader";
 import { useTask } from "../../context/TaskContext";
+import { useUser } from "../../context/UserContext";
+import EditModal from "../../components/EditModal";
 
 const TaskPage = () => {
-    const {state, fetchTask, addTask} = useTask();
+    const {state, fetchTask, addTask, selectTask, editMode} = useTask();
     const [addMode, setAddMode] = useState(false);
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState(1)
     const [deadline, setDeadline] = useState(moment().format("YYYY-MM-DD"))
-    const [isLoading, setIsLoading] = useState(true)
-
+    const [isLoading, setIsLoading] = useState(true);
+    const {state: userState, fetchUser} = useUser() 
+    
     const onSubmit = (e) => {
         e.preventDefault();
-        addTask(title, description, deadline)
+        addTask(title, description, deadline, status)
             .then((resp) => {
                 setAddMode(false);
                 setTitle("");
                 setDescription("");
                 setDeadline(moment().format("YYYY-MM-DD"));
+                setStatus(1);
             });
     }
-
     useEffect(() => {
         fetchTask().then(() => {
             setIsLoading(false);
@@ -36,7 +39,6 @@ const TaskPage = () => {
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
-    console.log(state.selectedTask)
     return (
         <>
             {/* Modal */}
@@ -65,7 +67,9 @@ const TaskPage = () => {
                     <button className="bg-blue-500 px-10 py-2 rounded-md text-white" type="submit">Add Task</button>
                 </div>
                 </form>
-            </div>
+                </div>
+            <EditModal isVisible={state.isEditMode}/>
+
             <div className="flex flex-1">
                 <Sidebar/>
                 <div className="flex-1">

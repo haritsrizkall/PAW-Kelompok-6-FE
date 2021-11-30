@@ -2,25 +2,31 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLogin, setIsLogin] = useState(false)
     const [error, setError] = useState("")
+    const {state: userState, fetchUser} = useUser() 
+    
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(email)
-        console.log(password);
         axios.post(`${process.env.REACT_APP_APIURL}/users/login`, {
             email,
             password
         }).then((resp) => {
-            console.log(resp.data);
             localStorage.setItem("token", resp.data.data.token);
             localStorage.setItem("id", resp.data.data.id);
             localStorage.setItem("name", resp.data.data.name);
-            setIsLogin(true);
+            
+            fetchUser().then(() => {
+                setIsLogin(true);
+            }).catch(err => {
+                console.log(err);
+                setIsLogin(true);
+            })
         }).catch((err) => {
             console.log(err.response.data.data);
             setError("Wrong email/password")
