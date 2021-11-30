@@ -6,27 +6,31 @@ import TaskCard from "../../components/TaskCard";
 import moment from "moment";
 import Loader from "../../components/Loader";
 import { useTask } from "../../context/TaskContext";
+import { useUser } from "../../context/UserContext";
+import EditModal from "../../components/EditModal";
+import ErrorInput from "../../components/ErrorInput";
 
 const TaskPage = () => {
-    const {state, fetchTask, addTask} = useTask();
+    const {state, fetchTask, addTask, selectTask, editMode} = useTask();
     const [addMode, setAddMode] = useState(false);
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState(1)
     const [deadline, setDeadline] = useState(moment().format("YYYY-MM-DD"))
-    const [isLoading, setIsLoading] = useState(true)
-
+    const [isLoading, setIsLoading] = useState(true);
+    const {state: userState, fetchUser} = useUser() 
+    
     const onSubmit = (e) => {
         e.preventDefault();
-        addTask(title, description, deadline)
+        addTask(title, description, deadline, status)
             .then((resp) => {
                 setAddMode(false);
                 setTitle("");
                 setDescription("");
                 setDeadline(moment().format("YYYY-MM-DD"));
+                setStatus(1);
             });
     }
-
     useEffect(() => {
         fetchTask().then(() => {
             setIsLoading(false);
@@ -36,7 +40,6 @@ const TaskPage = () => {
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
-    console.log(state.selectedTask)
     return (
         <>
             {/* Modal */}
@@ -46,9 +49,11 @@ const TaskPage = () => {
                 <form onSubmit={onSubmit}>
                 <div className="pb-2 border-b-2 border-black my-2">
                     <input type="text" placeholder="Title..." value={title} className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" onChange={(e) => setTitle(e.target.value)} required/>
+                    <ErrorInput text={'Required'} isVisible={!title}/>
                 </div>
                 <h3 className="mb-2 mt-4 text-lg font-medium">Description</h3>
                 <textarea className="shadow-md py-3 px-2 bg-gray-100 w-full rounded h-32 mb-4" placeholder="Description..." value={description} onChange={(e) => setDescription(e.target.value)} required/>
+                <ErrorInput text={'Required'} isVisible={!description}/>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Deadline</h3>
                     <input type="date" className="cursor-pointer" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>
@@ -65,7 +70,9 @@ const TaskPage = () => {
                     <button className="bg-blue-500 px-10 py-2 rounded-md text-white" type="submit">Add Task</button>
                 </div>
                 </form>
-            </div>
+                </div>
+            <EditModal isVisible={state.isEditMode}/>
+
             <div className="flex flex-1">
                 <Sidebar/>
                 <div className="flex-1">

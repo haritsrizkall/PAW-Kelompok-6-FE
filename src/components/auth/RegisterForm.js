@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
+import { isValidEmail } from "../../utils/validation";
+import ErrorInput from "../ErrorInput";
 
 const RegisterForm = () => {
     const [name, setName] = useState("")
@@ -24,7 +26,9 @@ const RegisterForm = () => {
     }
 
     if (isRegistered) {
-        return <Navigate to="/"/>
+        return <Navigate to="/" state={{
+            message: "You have successfully registered. Please login to continue."
+        }}/>
     }
 
     return (
@@ -32,13 +36,14 @@ const RegisterForm = () => {
         <form className="w-1/2 m-auto">
             <h1 className="text-3xl mb-4 font-bold">Register</h1>
             <div className="my-2">
-                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="text" placeholder="name" value={name} onChange={(e) => setName(e.target.value)} required/>
+                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="text" placeholder="name" value={name} onChange={(e) => setName(e.target.value)} required autoComplete="off"/>
             </div>
             <div className="my-2">
-                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="off"/>
+                <ErrorInput text={'Wrong email format'} isVisible={!isValidEmail(email) && email}/>
             </div>
             <div className="my-2">
-                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                <input className="shadow-md py-3 px-2 bg-gray-100 w-full focus:outline-none rounded" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="off"/>
             </div>
             <p className="text-right my-2 text-blue-600">forgot password?</p>
             <div className="my-2">
