@@ -2,7 +2,6 @@ import React from "react"
 import { useTask } from "../../context/TaskContext"
 import profile from "./../../assets/images/profilepicture.png"
 import { useUser } from "../../context/UserContext";
-import profile from "./../../assets/images/profile.png"
 
 const Topbar = () => {
     const {state, search} = useTask();
