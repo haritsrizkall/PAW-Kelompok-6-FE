@@ -4,7 +4,7 @@ import React, { useContext, useReducer } from "react";
 export const defaultState = {
     user: {
         id: "",
-        name: "Jabari",
+        name: "",
         email: "",
         password: "",
         avatar: "",
@@ -14,6 +14,7 @@ export const defaultState = {
 export const Action = {
     Fetch: 'Fetch',
     Update: 'Update',
+    UpdateAvatar: 'UpdateAvatar',
 }
 
 export const UserReducer = (state, action) => {
@@ -28,6 +29,14 @@ export const UserReducer = (state, action) => {
                 ...state,
                 user: action.payload.user
             }
+        case Action.UpdateAvatar:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    avatar: action.payload.avatar
+                }
+            }
         default: 
             return state;
             break;
@@ -35,6 +44,17 @@ export const UserReducer = (state, action) => {
 }
 
 const store = React.createContext();
+
+const updateAvatar = (dispatch) => {
+    return (avatar) => {
+        dispatch({
+            type: Action.UpdateAvatar,
+            payload: {
+                avatar: avatar
+            }
+        })
+    }
+}
 
 const updateUser = (dispatch) => {
     return async (user) => {
@@ -74,7 +94,8 @@ export const UserProvider = ({ children, initialState, reducer}) => {
     const value = {
         state,
         fetchUser: fetchUser(dispatch),
-        updateUser: updateUser(dispatch)
+        updateUser: updateUser(dispatch),
+        updateAvatar: updateAvatar(dispatch)
     }
     return <store.Provider value={value}>{children}</store.Provider>
 }
