@@ -5,7 +5,7 @@ import trash from "./../assets/images/close.png"
 
 const TaskCard = ({data}) => {
 
-    const {state, deleteTask, selectTask} = useTask();
+    const {state, deleteTask, selectTask, editMode} = useTask();
     
     return (
         <div className="cursor-pointer hover:border-blue-500 border px-5 py-5 mx-5 my-5 shadow-lg rounded-md">
@@ -26,12 +26,14 @@ const TaskCard = ({data}) => {
             </div>
             <div className="my-2 flex justify-between font-medium">
                 <p>Status :</p>
-                <p>{data.status ? 'Done' : 'To Do'}</p>
+                <p>{data.status == 3 ? 'Done' : data.status == 2 ? 'Doing' : 'To Do'}</p>
             </div>
             <div className="flex mt-7 justify-end self-end">
                 <button className="cursor-pointer hover:border-blue-500 hover:bg-white hover:text-blue-500 border bg-blue-500 px-10 py-2 rounded-md text-white"  onClick={(e) => {
                     e.preventDefault();
-                    selectTask(data)
+                    selectTask(data);
+                    editMode(true);
+
                 }}>Edit</button>
             </div>
         </div>

@@ -7,28 +7,51 @@ import profpic from "./../assets/images/profilepicture.png"
 import Topbar from "../components/topbar/Topbar";
 import Loader from "../components/Loader";
 import { useUser } from "../context/UserContext";
+import { isValidEmail } from "../utils/validation";
+import ErrorInput from "../components/ErrorInput";
 
 const AccountPage = () => {
-    const [profile, setProfile] = useState({})
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
     const [editMode, setEditMode] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const {state: userState, fetchUser} = useUser();
+    const {state: userState, fetchUser, updateUser} = useUser();
 
     useEffect(() => {
         fetchUser()
         .then(() => {
             setIsLoading(false)
+            setName(userState.user.name)
+            setEmail(userState.user.email)
         }).catch((err) => {
             console.log(err);
         })
-
     }, [])
 
     if (!localStorage.getItem("token")) {
         return <Navigate to="/"/>
     }
 
-    console.log(userState.user)
+    const onSubmit = (e) => {
+        e.preventDefault();
+        setIsLoading(true)
+        axios.patch(`${process.env.REACT_APP_APIURL}/users/${userState.user._id}`, {
+            name,
+            email
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        }).then((resp) => {
+            setIsLoading(false)
+            setEditMode(false)
+            updateUser(resp.data.data)
+        }).catch((err) => {
+            console.log(err.response.data);
+        })
+
+    }
+
     return (
         <>
             <Loader visible={isLoading}/>
@@ -41,40 +64,40 @@ const AccountPage = () => {
                     </div>
                     <div className="flex mx-10 mt-10">
                         <div className="mr-12">
-                            <img src={profpic} width={250} className="rounded-sm"/>
+                            <img src={userState.user.avatar ? userState.user.avatar : profpic} width={250} className="rounded-sm"/>
                         </div>
                         <div className="flex-1 ml-12">
-                            <form>
+                            <form onSubmit={onSubmit}>
                                 <div className="flex items-center mb-5">
                                     <label className="inline-block w-44 mr-6 text-left 
                                      font-bold text-l">Name</label>
-                                    <input  type="text" id="name" name="name" placeholder="Name" value={userState.user.name} class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode}/>
+                                    <div className="flex flex-1 flex-col">
+                                        <input  type="text" id="name" name="name" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode} required/>
+                                        <ErrorInput text={'Required'} isVisible={!name}/>
+                                    </div>
                                 </div>
                                 <div className="flex items-center mb-5">
                                     <label className="inline-block w-44 mr-6 text-left 
                                      font-bold text-l">Email</label>
-                                    <input  type="text" id="email" name="email" placeholder="Email" value={userState.user.email}
-                                    class="flex-1 shadow-md py-3 px-2 bg-gray-100 rounded focus:outline-none" disabled={!editMode}/>
-                                </div>
-                                <div className="flex items-center mb-5">
-                                    <label className="inline-block w-44 mr-6 text-left 
-                                     font-bold text-l">Password</label>
-                                    <input  type="password" id="password" name="password" placeholder="Password" value={"rahasia"} 
-                                    class="flex-1 shadow-md py-3 px-2 bg-gray-100 w-full rounded focus:outline-none" disabled={!editMode}/>
+                                     <div className="flex-1 flex flex-col">
+                                        <input  type="text" id="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
+                                        class="flex-1 shadow-md py-3 px-2 bg-gray-100 rounded focus:outline-none" disabled={!editMode} required autoComplete="off"/>
+                                        <ErrorInput text={'Wrong email format'} isVisible={!isValidEmail(email)}/>
+                                        <ErrorInput text={'Required'} isVisible={!email}/>
+                                     </div>
                                 </div>
                                 <div className="flex mt-7 justify-end">
                                     {editMode ? (
                                         <div>
                                         <button className="bg-blue-500 px-10 py-2 rounded-md text-white items-left" onClick={(e) => {
                                             e.preventDefault();
-                                            setEditMode(!editMode)
+                                            setEditMode(!editMode);
+                                            setName(userState.user.name);
+                                            setEmail(userState.user.email);
                                         }}>
                                             Upload Profile Picture
                                         </button>
-                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3" onClick={(e) => {
-                                            e.preventDefault();
-                                            setEditMode(!editMode)
-                                        }}>
+                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3" type="submit">
                                             Save Changes
                                         </button>
                                         <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 "onClick={(e) => {
