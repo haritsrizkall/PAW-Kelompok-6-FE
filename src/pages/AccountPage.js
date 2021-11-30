@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import Sidebar from "./../components/navbar/Sidebar";
 import search from "./../assets/images/search.png"
-import profpic from "./../assets/images/profile.png"
+import profpic from "./../assets/images/profilepicture.png"
 import Topbar from "../components/topbar/Topbar";
 import Loader from "../components/Loader";
 import { useUser } from "../context/UserContext";
@@ -60,7 +60,7 @@ const AccountPage = () => {
                 <div className="flex-1">
                     <Topbar/>
                     <div className="mx-10 mt-5 flex justify-between items-center">
-                        <h1 className="text-3xl font-semibold">My Account</h1>
+                        <h1 className="text-3xl font-bold">My Account</h1>
                     </div>
                     <div className="flex mx-10 mt-10">
                         <div className="mr-12">
@@ -77,7 +77,7 @@ const AccountPage = () => {
                                     </div>
                                 </div>
                                 <div className="flex items-center mb-5">
-                                    <label className="iinline-block w-44 mr-6 text-left 
+                                    <label className="inline-block w-44 mr-6 text-left 
                                      font-bold text-l">Email</label>
                                      <div className="flex-1 flex flex-col">
                                         <input  type="text" id="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
@@ -89,20 +89,26 @@ const AccountPage = () => {
                                 <div className="flex mt-7 justify-end">
                                     {editMode ? (
                                         <div>
-                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3" onClick={(e) => {
+                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white items-left" onClick={(e) => {
                                             e.preventDefault();
                                             setEditMode(!editMode);
                                             setName(userState.user.name);
                                             setEmail(userState.user.email);
                                         }}>
-                                            Cancel
+                                            Upload Profile Picture
                                         </button>
                                         <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3" type="submit">
                                             Save Changes
                                         </button>
+                                        <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 "onClick={(e) => {
+                                            e.preventDefault();
+                                            setEditMode(!editMode)
+                                        }}>
+                                            Cancel
+                                        </button>
                                         </div>
                                     ): (
-                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white" onClick={(e) => {
+                                        <button className="cursor-pointer hover:border-blue-500 hover:bg-white hover:text-blue-500 border bg-blue-500 px-10 py-2 rounded-md text-white" onClick={(e) => {
                                             e.preventDefault();
                                             setEditMode(!editMode)
                                         }}>
@@ -110,6 +116,9 @@ const AccountPage = () => {
                                         </button>
                                     )}
                                 </div>
+                                
+                                
+                                
                             </form>
                         </div>
                     </div>
