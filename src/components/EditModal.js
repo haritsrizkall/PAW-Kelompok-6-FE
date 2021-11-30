@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useTask } from "../context/TaskContext";
+import ErrorInput from "./ErrorInput";
 import Loader from "./Loader";
 
 
@@ -26,8 +27,6 @@ const EditModal = ({isVisible}) => {
         updateTask(state.selectedTask._id, title, description, deadline, status).then(() => {
             setIsLoading(false);
             editMode(false);
-            console.log("Task updated");
-            console.log(state.tasks)
         });
     }
 
@@ -41,9 +40,11 @@ const EditModal = ({isVisible}) => {
                 <form onSubmit={onSubmit}>
                 <div className="pb-2 border-b-2 border-black my-2">
                     <input type="text" placeholder="Title..." value={title} className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" onChange={(e) => setTitle(e.target.value)} required/>
+                    <ErrorInput text={'Required'} isVisible={!title}/>
                 </div>
                 <h3 className="mb-2 mt-4 text-lg font-medium">Description</h3>
                 <textarea className="shadow-md py-3 px-2 bg-gray-100 w-full rounded h-32 mb-4" placeholder="Description..." value={description} onChange={(e) => setDescription(e.target.value)} required/>
+                <ErrorInput text={'Required'} isVisible={!description}/>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Deadline</h3>
                     <input type="date" className="cursor-pointer" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>

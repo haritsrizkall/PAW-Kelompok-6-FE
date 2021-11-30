@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import { isValidEmail } from "../../utils/validation";
+import ErrorInput from "../ErrorInput";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("")
@@ -45,10 +47,11 @@ const LoginForm = () => {
                 <p className="text-l text-red-500">{error}</p>
             )}
             <div className="my-2">
-                <input className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <input className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <ErrorInput text={'Wrong email format'} isVisible={!isValidEmail(email) && email}/>
             </div>
             <div className="my-2">
-                <input className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <input className="shadow-md py-3 px-2 bg-gray-100 w-full rounded" type="password" placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
             </div>
             <p className="text-right my-2 text-blue-600">forgot password?</p>
             <div className="my-2">
