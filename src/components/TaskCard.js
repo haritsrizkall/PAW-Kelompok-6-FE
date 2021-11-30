@@ -33,7 +33,6 @@ const TaskCard = ({data}) => {
                     e.preventDefault();
                     selectTask(data);
                     editMode(true);
-
                 }}>Edit</button>
             </div>
         </div>

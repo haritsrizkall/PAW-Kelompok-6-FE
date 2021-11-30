@@ -200,7 +200,7 @@ const AccountPage = () => {
                                 <div className="flex mt-7 justify-end">
                                     {editMode ? (
                                         <div>
-                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white items-left" onClick={(e) => {
+                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white items-left hover:bg-blue-600" onClick={(e) => {
                                             e.preventDefault();
                                             setEditMode(!editMode);
                                             setName(userState.user.name);
@@ -209,10 +209,10 @@ const AccountPage = () => {
                                         }}>
                                             Upload Profile Picture
                                         </button>
-                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3" type="submit">
+                                        <button className="bg-blue-500 px-10 py-2 rounded-md text-white mx-3 hover:bg-blue-600" type="submit">
                                             Save Changes
                                         </button>
-                                        <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 "onClick={(e) => {
+                                        <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 hover:bg-gray-200"onClick={(e) => {
                                             e.preventDefault();
                                             setEditMode(!editMode)
                                         }}>
