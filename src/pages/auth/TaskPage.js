@@ -56,18 +56,22 @@ const TaskPage = () => {
                 <ErrorInput text={'Required'} isVisible={!description}/>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Deadline</h3>
-                    <input type="date" className="cursor-pointer" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>
+                    <input type="date" className="cursor-pointer hover:bg-gray-100 rounded" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>
                 </div>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Status</h3>
-                    <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                    <select className="cursor-pointer hover:bg-gray-100 rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
                         <option value={1}>To do</option>
                         <option value={2}>Doing</option>
                         <option value={3}>Done</option>
                     </select>
                 </div>
                 <div className="flex justify-end">
-                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white font-semibold" type="submit">Add Task</button>
+                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white font-semibold hover:bg-blue-600" type="submit">Add Task</button>
+                    <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 hover:bg-gray-100 active:bg-gray-200"onClick={(e) => {
+                        e.preventDefault();
+                        setAddMode(!true)
+                    }}>Cancel</button>
                 </div>
                 </form>
                 </div>
