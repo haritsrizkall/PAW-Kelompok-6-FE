@@ -44,7 +44,7 @@ const TaskPage = () => {
         <>
             {/* Modal */}
             <Loader visible={isLoading}/>
-                <div className={addMode ? "absolute bg-black bg-opacity-50 opacity-80 inset-0 z-0 h-full" : "hidden"} onClick={() => setAddMode(false)}></div>
+                <div className={addMode ? "absolute bg-black bg-opacity-50 opacity-80 inset-0 z-0 h-full min-h-screen" : "hidden"} onClick={() => setAddMode(false)}></div>
                 <div className={addMode ? "w-full max-w-lg p-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto my-auto rounded-xl shadow-lg bg-white z-10" : "hidden"}>
                 <form onSubmit={onSubmit}>
                 <div className="pb-2 border-b-2 border-black my-2">
