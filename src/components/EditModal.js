@@ -47,11 +47,11 @@ const EditModal = ({isVisible}) => {
                 <ErrorInput text={'Required'} isVisible={!description}/>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Deadline</h3>
-                    <input type="date" className="cursor-pointer" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>
+                    <input type="date" className="cursor-pointer hover:bg-gray-100 rounded" placeholder="Select date" value={deadline} onChange={(e) => setDeadline(moment(e.target.value).format("YYYY-MM-DD"))}/>
                 </div>
                 <div className="mb-4 flex">
                     <h3 className="w-40">Status</h3>
-                    <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                    <select className="cursor-pointer hover:bg-gray-100 rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
                         <option value={1}>To do</option>
                         <option value={2}>Doing</option>
                         <option value={3}>Done</option>
