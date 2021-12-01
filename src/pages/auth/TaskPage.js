@@ -67,7 +67,11 @@ const TaskPage = () => {
                     </select>
                 </div>
                 <div className="flex justify-end">
-                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white font-semibold" type="submit">Add Task</button>
+                    <button className="bg-blue-500 px-10 py-2 rounded-md text-white font-semibold hover:bg-blue-600" type="submit">Add Task</button>
+                    <button className="bg-transparent px-10 py-1.5 rounded-md text-blue-500 mx-3 border-2 border-blue-500 hover:bg-gray-100 active:bg-gray-200"onClick={(e) => {
+                        e.preventDefault();
+                        setAddMode(!true)
+                    }}>Cancel</button>
                 </div>
                 </form>
                 </div>

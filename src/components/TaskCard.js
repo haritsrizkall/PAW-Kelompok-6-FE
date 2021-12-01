@@ -8,9 +8,9 @@ const TaskCard = ({data}) => {
     const {state, deleteTask, selectTask, editMode} = useTask();
     
     return (
-        <div className="cursor-pointer hover:border-blue-500 border px-5 py-5 mx-5 my-5 shadow-lg rounded-md">
+        <div className="hover:border-blue-500 border px-5 py-5 mx-5 my-5 shadow-lg rounded-md">
             <div className="flex justify-end" onClick={() => {
-                deleteTask(data._id);
+                if (window.confirm('Are you sure you wish to delete this item?')) deleteTask(data._id);
             }}>
                 <img src={trash} alt="delete" width={15} className="cursor-pointer"/>
             </div>
